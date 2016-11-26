@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Http\Controllers;
+
+class ApiController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    private $appkey = '23426822';
+    private $secretKey = 'c32092e3bfc627fafe2a4c9d39de75d1';
+    private $topClient = null;
+    private $reqArr = array();
+    public function __construct()
+    {
+        //
+    }
+
+    private function getTopClient(){
+        if(!$this->topClient){
+            $this->topClient = new TopClient;
+        }
+        return $this->topClient;
+    }
+
+    private function getRequest($req_name,$req){
+        if(!array_key_exists($req_name,$this->reqArr)){
+            $this->req[$req_name] = $req; 
+        }
+        return $this->req[$req_name];
+    }
+    
+    public function getWholeCategory(){
+        $req_name = 'wholesale.category.get';
+        $client = $this->getTopClient();
+        $client->appKey = $this->appkey;
+        $client->secretKey = $this->secretKey;
+        $req = $this->getRequest($req_name,new AlibabaWholesaleCategoryGetRequest);
+        $resp = $client->execute($req);
+        echo $resp;
+    }
+
+    //
+}
